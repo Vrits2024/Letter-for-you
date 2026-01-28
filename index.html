@@ -220,4 +220,158 @@ setInterval(() => {
 </script>
 
 </body>
+</html>    transform: scale(1.05);
+}
+
+/* ===== FLOWERS IMAGE ===== */
+.flower-img {
+    width: 120px;
+    margin: 20px auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== FLOATING HEARTS ===== */
+.heart {
+    position: absolute;
+    font-size: 26px;
+    animation: floatUp 6s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.8); opacity: 1; }
+    100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+}
+
+/* ===== FLOWER FLOAT ===== */
+.flower {
+    position: absolute;
+    width: 40px;
+    opacity: 0.85;
+    animation: drift 14s linear infinite;
+}
+
+@keyframes drift {
+    from { transform: translateY(110vh) rotate(0deg); }
+    to { transform: translateY(-120vh) rotate(360deg); }
+}
+
+/* ===== ANIMATION ===== */
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== OPENING ===== -->
+<div class="card" id="opening">
+    <h1>Hello my Favourite person 💓</h1>
+    <p>
+        Before you read my special letter,<br>
+        you can try to tap.<br><br>
+        A heart will appear on your cellphone / laptop screen 😊💖
+    </p>
+</div>
+
+<button id="readBtn" class="hidden">Read 💌</button>
+
+<!-- ===== LETTER ===== -->
+<div class="card hidden" id="letter">
+    <h1>This is for you 💐</h1>
+
+    <img class="flower-img"
+         src="https://images.unsplash.com/photo-1526045478516-99145907023c"
+         alt="flower">
+
+    <p id="text"></p>
+</div>
+
+<script>
+let tapped = false;
+const readBtn = document.getElementById("readBtn");
+const opening = document.getElementById("opening");
+const letter = document.getElementById("letter");
+const textEl = document.getElementById("text");
+
+const message = [
+    "Yeah, just for you.",
+    "Why?",
+    "Because you're the only one in this world for me 💗",
+    "",
+    "Thanks for what you have done for me.",
+    "I hope you really understand my feelings after you saw this letter.",
+    "",
+    "I'm gonna work harder and become a better, more successful person.",
+    "Because my current dream is simple.",
+    "",
+    "I want to make you smile.",
+    "I want to make you happy.",
+    "And I want to spend my lifetime future with you 💖",
+    "",
+    "Terimakasih sudah membacanya sampai akhir.",
+    "Semoga kamu suka 💗💖"
+];
+
+let index = 0;
+
+document.body.addEventListener("click", (e) => {
+    createHeart(e.clientX, e.clientY);
+    if (!tapped) {
+        tapped = true;
+        readBtn.classList.remove("hidden");
+    }
+});
+
+readBtn.onclick = () => {
+    opening.classList.add("hidden");
+    readBtn.classList.add("hidden");
+    letter.classList.remove("hidden");
+    showText();
+};
+
+/* ===== TYPE EFFECT ===== */
+function showText() {
+    if (index >= message.length) return;
+
+    const line = message[index];
+    let char = 0;
+    const interval = setInterval(() => {
+        textEl.innerHTML += line.charAt(char);
+        char++;
+        if (char === line.length) {
+            clearInterval(interval);
+            textEl.innerHTML += "<br><br>";
+            index++;
+            setTimeout(showText, 800);
+        }
+    }, 35);
+}
+
+/* ===== HEART EFFECT ===== */
+function createHeart(x, y) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = ["💗","💖","💘","💕"][Math.floor(Math.random()*4)];
+    heart.style.left = x + "px";
+    heart.style.top = y + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
+
+/* ===== FLOATING FLOWERS ===== */
+setInterval(() => {
+    const flower = document.createElement("img");
+    flower.src = "https://images.unsplash.com/photo-1501004318641-b39e6451bec6";
+    flower.className = "flower";
+    flower.style.left = Math.random()*100 + "vw";
+    document.body.appendChild(flower);
+    setTimeout(() => flower.remove(), 15000);
+}, 3000);
+</script>
+
+</body>
 </html>
