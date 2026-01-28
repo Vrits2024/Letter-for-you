@@ -36,9 +36,7 @@ body {
     z-index: 5;
 }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 h1 {
     color: #ff5fa2;
@@ -49,11 +47,12 @@ p {
     font-size: 17px;
     color: #444;
     line-height: 1.7;
+    min-height: 120px;
 }
 
 /* ===== BUTTON ===== */
 button {
-    margin-top: 25px;
+    margin-top: 20px;
     padding: 12px 28px;
     border: none;
     border-radius: 30px;
@@ -65,8 +64,170 @@ button {
     transition: transform 0.2s;
 }
 
-button:hover {
-    transform: scale(1.05);
+button:hover { transform: scale(1.05); }
+
+/* ===== HEART ===== */
+.heart {
+    position: absolute;
+    font-size: 26px;
+    animation: floatUp 6s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0) scale(0.8); opacity: 1; }
+    to { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+}
+
+/* ===== FLOWER EMOJI ===== */
+.flower-emoji {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.8;
+    animation: drift 16s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes drift {
+    from { transform: translateY(110vh) rotate(0deg); }
+    to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+}
+
+/* ===== POP ===== */
+@keyframes pop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING -->
+<div class="card" id="opening">
+    <h1>Hello my Favourite person 💓</h1>
+    <p>Before you read my special letter,<br>try tapping the screen 💗</p>
+</div>
+
+<button id="readBtn" class="hidden">Read 💌</button>
+
+<!-- LETTER -->
+<div class="card hidden" id="letter">
+    <h1>This is for you 💗</h1>
+    <p id="text"></p>
+    <button id="nextBtn">Next 💖</button>
+    <button id="restartBtn" class="hidden">Back to Start 🔁</button>
+</div>
+
+<script>
+let tapped = false;
+let index = 0;
+let typing = false;
+
+const opening = document.getElementById("opening");
+const letter = document.getElementById("letter");
+const readBtn = document.getElementById("readBtn");
+const nextBtn = document.getElementById("nextBtn");
+const restartBtn = document.getElementById("restartBtn");
+const textEl = document.getElementById("text");
+
+/* ===== FULL MESSAGE ===== */
+const messages = [
+    "Yeah, just for you.",
+    "Why?",
+    "Because you're the only one in this world for me 💗",
+    "Thanks for what you have done for me.",
+    "I hope you really understand my feelings after you saw this letter.",
+    "I'm gonna work harder and become a better, more successful person.",
+    "Because my current dream is simple.",
+    "I want to make you smile.",
+    "I want to make you happy.",
+    "And I want to spend my lifetime future with you 💖",
+    "Terimakasih sudah membacanya sampai akhir.",
+    "Semoga kamu suka 💗💖"
+];
+
+/* ===== TAP ===== */
+document.body.addEventListener("click", e => {
+    createHeart(e.clientX, e.clientY);
+    if (!tapped) {
+        tapped = true;
+        readBtn.classList.remove("hidden");
+    }
+});
+
+/* ===== READ ===== */
+readBtn.onclick = () => {
+    opening.classList.add("hidden");
+    readBtn.classList.add("hidden");
+    letter.classList.remove("hidden");
+    index = 0;
+    textEl.innerHTML = "";
+    nextBtn.classList.remove("hidden");
+    restartBtn.classList.add("hidden");
+};
+
+/* ===== NEXT ===== */
+nextBtn.onclick = () => {
+    if (typing) return;
+    if (index < messages.length) {
+        typeLine(messages[index]);
+        index++;
+        if (index === messages.length) {
+            nextBtn.classList.add("hidden");
+            restartBtn.classList.remove("hidden");
+        }
+    }
+};
+
+/* ===== RESTART ===== */
+restartBtn.onclick = () => {
+    letter.classList.add("hidden");
+    opening.classList.remove("hidden");
+    tapped = false;
+    textEl.innerHTML = "";
+};
+
+/* ===== TYPE EFFECT ===== */
+function typeLine(text) {
+    typing = true;
+    let char = 0;
+    textEl.innerHTML = "";
+
+    const interval = setInterval(() => {
+        textEl.innerHTML += text.charAt(char);
+        char++;
+        if (char === text.length) {
+            clearInterval(interval);
+            typing = false;
+        }
+    }, 35);
+}
+
+/* ===== HEART ===== */
+function createHeart(x, y) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = ["💗","💖","💕","💘"][Math.floor(Math.random()*4)];
+    heart.style.left = x + "px";
+    heart.style.top = y + "px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
+
+/* ===== FLOWER EMOJI ===== */
+setInterval(() => {
+    const flower = document.createElement("div");
+    flower.className = "flower-emoji";
+    flower.innerText = ["🌸","🌼","🌺","🌷"][Math.floor(Math.random()*4)];
+    flower.style.left = Math.random()*100 + "vw";
+    document.body.appendChild(flower);
+    setTimeout(() => flower.remove(), 16000);
+}, 2400);
+</script>
+
+</body>
+</html>    transform: scale(1.05);
 }
 
 /* ===== FLOATING HEARTS ===== */
